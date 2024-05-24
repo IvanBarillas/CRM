@@ -1,0 +1,60 @@
+{% extends 'core/base.html' %}
+{% block body %}
+<body class="hold-transition layout-top-nav">
+    <div class="wrapper">
+    
+    {% include "core/hzt/header.html" %}
+    
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1 class="m-0"> Top Navigation <small>Example 3.0</small></h1>
+              </div><!-- /.col -->
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item"><a href="#">{{entity}}</a></li>                  
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content">
+          <div class="container">
+            {% block content %}
+              
+              
+            {% endblock content %}
+
+            
+          </div>
+        </div>        
+      </div>    
+    {% include "core/footer.html" %}
+    </div>
+    {% load static %}
+    <script src="{% static "core/vendor/adminlte-3.2.0/plugins/jquery/jquery.min.js" %}" ></script>
+    <!-- Bootstrap 4 -->
+    <script src="{% static "core/vendor/adminlte-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static "core/vendor/adminlte-3.2.0/js/adminlte.min.js" %}"></script>
+    {% block javascript %}
+    <script type="text/javascript">
+      // Define la URL del archivo estático como una variable global
+      var datatableSpanishUrl = "{% static 'core/vendor/datatables-1.10.20/spanish.txt' %}";  
+    </script>
+    <script src="{% static 'core/vendor/datatables-1.10.20/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'core/vendor/datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'core/vendor/datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'core/vendor/datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+
+
+    
+
+    {% endblock %}
+    </body>`
+    {% endblock body %}`
