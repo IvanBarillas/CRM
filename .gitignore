@@ -176,6 +176,9 @@ bfg.jar
 *.tmp
 .DS_Store
 
+# Ignore Zone.Identifier files
+*.Zone.Identifier
+
 
 
 # PyCharm
