@@ -193,6 +193,8 @@ else:
     EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
     EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
 
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default=f"CRM Help Desk <{env('EMAIL_HOST_USER')}>")
+
 
 
 SITE_URL = env('SITE_URL', default='http://127.0.0.1:8000')
