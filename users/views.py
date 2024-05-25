@@ -15,6 +15,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken
 from django.core.mail import send_mail
 from django.conf import settings
+from .tasks import send_access_enduser_email, send_admin_login_email
 import logging
 
 logger = logging.getLogger(__name__)
@@ -53,7 +54,7 @@ class RequestAccessTokenAPIView(APIView):
             
             # Verificar si el email existe en ManagerUser o es un superusuario
             if ManagerUser.objects.filter(email=email).exists() or CustomUser.objects.filter(email=email, is_superuser=True).exists():
-                logger.info("Los administradores deben ingresar por el panel de administración")
+                send_admin_login_email.delay(email)
                 return Response({'detail': 'Los administradores deben ingresar por el panel de administración'}, status=status.HTTP_403_FORBIDDEN)
             
             user, created = EndUser.objects.get_or_create(email=email)
@@ -65,18 +66,11 @@ class RequestAccessTokenAPIView(APIView):
             refresh = RefreshToken.for_user(user)
             token = str(refresh.access_token)
 
-            # Enviar correo con el token
-            send_mail(
-                'Tu enlace de acceso',
-                f'Por favor haz clic en el siguiente enlace para acceder a tu cuenta:\n\n'
-                f'{settings.SITE_URL}/api/users/access/{token}/',  # Asegúrate de que esta URL sea correcta
-                settings.DEFAULT_FROM_EMAIL,
-                [email],
-                fail_silently=False,
-            )
+            # Enviar correo con el token de forma asíncrona
+            send_access_enduser_email.delay(email, token)
+
             return Response({'detail': 'Correo enviado con el enlace de acceso'}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class AccessTokenLoginView(APIView):
