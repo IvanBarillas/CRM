@@ -25,7 +25,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile_data = validated_data.pop('profile')
         user = CustomUser.objects.create_user(**validated_data)
-        Profile.objects.create(user=user, **profile_data)
+        # No crear el perfil aquí, dejar que la señal lo maneje
         return user
 
     def update(self, instance, validated_data):
@@ -49,3 +49,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         profile.save()
 
         return instance
+
+
+class RequestAccessSerializer(serializers.Serializer):
+    email = serializers.EmailField()

@@ -11,11 +11,11 @@ class ProfileInline(admin.StackedInline):
 
 class UserAdmin(BaseUserAdmin):
     inlines = (ProfileInline,)
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'user_type')
+    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'user_type')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups', 'user_type')
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+        (None, {'fields': ('email', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name')}),
         (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
         }),
@@ -25,11 +25,11 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2', 'user_type'),
+            'fields': ('email', 'password1', 'password2', 'user_type'),
         }),
     )
-    search_fields = ('username', 'first_name', 'last_name', 'email')
-    ordering = ('username',)
+    search_fields = ('email', 'first_name', 'last_name')
+    ordering = ('email',)  # Usar email para ordenar
     filter_horizontal = ('groups', 'user_permissions',)
 
 admin.site.register(CustomUser, UserAdmin)
