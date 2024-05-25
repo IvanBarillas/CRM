@@ -1,7 +1,6 @@
 # users/models.py
-from django.contrib.auth.models import AbstractUser
-from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db import models
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -26,14 +25,8 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    USER_TYPE_CHOICES = (
-        ('internal', 'Internal'),
-        ('final', 'Final'),
-    )
-
     username = None  # Eliminar el campo username
     email = models.EmailField(unique=True)  # Usar email como identificador único
-    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
@@ -42,6 +35,19 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class EndUser(CustomUser):
+    class Meta:
+        verbose_name = 'End User'
+        verbose_name_plural = 'End Users'
+
+
+class ManagerUser(CustomUser):
+    class Meta:
+        verbose_name = 'Manager User'
+        verbose_name_plural = 'Manager Users'
+
 
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='profile')
@@ -54,5 +60,4 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
 
     def __str__(self):
-        return f'{self.user.username} Profile'
-
+        return f'{self.user.email} Profile'

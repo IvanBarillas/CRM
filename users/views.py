@@ -1,4 +1,4 @@
-# users/views.py
+#users/views.py
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
@@ -6,34 +6,27 @@ from django.utils.timezone import make_aware, now
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import CustomUser
-from .serializers import UserSerializer, UserCreateSerializer, RequestAccessSerializer
+from .models import EndUser, Profile, ManagerUser
+from .serializers import EndUserSerializer, RequestAccessSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken
-from rest_framework import status
 from django.core.mail import send_mail
 from django.conf import settings
-from django.utils import timezone
-import uuid
 import logging
-
-
 
 logger = logging.getLogger(__name__)
 
-
-
 class UserRegisterAPIView(generics.CreateAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserCreateSerializer
-    permission_classes = [AllowAny] 
+    queryset = EndUser.objects.all()
+    serializer_class = EndUserSerializer
+    permission_classes = [AllowAny]
 
 class UserProfileAPIView(generics.RetrieveUpdateAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
+    queryset = EndUser.objects.all()
+    serializer_class = EndUserSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
@@ -44,12 +37,12 @@ class UserTypeRedirectAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         user = request.user
-        if user.user_type == 'internal':
+        if isinstance(user, ManagerUser):
             return Response({'detail': 'Redirect to internal dashboard'}, status=status.HTTP_200_OK)
-        elif user.user_type == 'final':
+        elif isinstance(user, EndUser):
             return Response({'detail': 'Redirect to final user dashboard'}, status=status.HTTP_200_OK)
         return Response({'detail': 'Invalid user type'}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 class RequestAccessTokenAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -57,7 +50,7 @@ class RequestAccessTokenAPIView(APIView):
         serializer = RequestAccessSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data['email']
-            user, created = CustomUser.objects.get_or_create(email=email, user_type='final')
+            user, created = EndUser.objects.get_or_create(email=email)
             if created:
                 user.first_name = "User"
                 user.last_name = "Final"
@@ -77,8 +70,7 @@ class RequestAccessTokenAPIView(APIView):
             )
             return Response({'detail': 'Correo enviado con el enlace de acceso'}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    
+
 class AccessTokenLoginView(APIView):
     permission_classes = [AllowAny]
 
@@ -93,6 +85,11 @@ class AccessTokenLoginView(APIView):
                 return redirect('admin:login')
 
             user = jwt_auth.get_user(validated_token)
+
+            # Asegúrate de que el perfil existe
+            if not hasattr(user, 'profile'):
+                Profile.objects.create(user=user)
+
             login(request, user)
             logger.info(f"Usuario {user.email} autenticado exitosamente")
 
