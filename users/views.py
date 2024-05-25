@@ -6,7 +6,7 @@ from django.utils.timezone import make_aware, now
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import EndUser, Profile, ManagerUser
+from .models import EndUser, Profile, ManagerUser, CustomUser
 from .serializers import EndUserSerializer, RequestAccessSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -50,6 +50,12 @@ class RequestAccessTokenAPIView(APIView):
         serializer = RequestAccessSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data['email']
+            
+            # Verificar si el email existe en ManagerUser o es un superusuario
+            if ManagerUser.objects.filter(email=email).exists() or CustomUser.objects.filter(email=email, is_superuser=True).exists():
+                logger.info("Los administradores deben ingresar por el panel de administración")
+                return Response({'detail': 'Los administradores deben ingresar por el panel de administración'}, status=status.HTTP_403_FORBIDDEN)
+            
             user, created = EndUser.objects.get_or_create(email=email)
             if created:
                 user.first_name = "User"
@@ -70,6 +76,8 @@ class RequestAccessTokenAPIView(APIView):
             )
             return Response({'detail': 'Correo enviado con el enlace de acceso'}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class AccessTokenLoginView(APIView):
     permission_classes = [AllowAny]
