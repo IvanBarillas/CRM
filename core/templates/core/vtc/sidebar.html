@@ -1,104 +1,131 @@
 {% load static %}
-<aside class="main-sidebar sidebar-dark-primary elevation-4 sidebar-no-expand">
+<aside class="main-sidebar elevation-4 sidebar-light-primary sidebar-collapse sidebar-no-expand">
+    <!-- Brand Logo -->
     <a href="#" class="brand-link">
         <img src="{% static "core/img/logo_sisa-white.png" %}" alt="SISA Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">SISA</span>
     </a>
+
+    <!-- Sidebar -->
     <div class="sidebar">
+        <!-- User Panel -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <!-- <img src="{% static "core/vendor/adminlte-3.2.0/img/user8-128x128.jpg" %}" class="img-circle elevation-2" alt="User Image"> -->
-              {% if request.user.profile.avatar %}
-                <img src="{{ request.user.profile.avatar.url }}" class="brand-image img-circle elevation-3" alt="User Image">
-              {% else %}
-                <img src="{% static 'core/img/no-avatar.jpg' %}" class="brand-image img-circle elevation-3" alt="User Image">
-              {% endif %}
+                {% if request.user.profile.avatar %}
+                    <img src="{{ request.user.profile.avatar.url }}" class="img-circle elevation-2" alt="User Image">
+                {% else %}
+                    <img src="{% static 'core/img/no-avatar.jpg' %}" class="img-circle elevation-2" alt="User Image">
+                {% endif %}
             </div>
             <div class="info">
-                <!-- <a href="#" class="d-block">Alexander Pierce</a> -->
-                <a href="#" class="d-block">{{request.user.username}}</a>
+                <a href="#" class="d-block">{{ request.user.username }}</a>
             </div>
         </div>
+
+        <!-- Sidebar Search -->
+        <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-sidebar">
+                        <i class="fas fa-search fa-fw"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column nav-legacy" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Dashboard -->
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>Dashboard<span class="right badge badge-danger">New</span></p>
+                        <p>
+                            Dashboard
+                            <span class="right badge badge-danger">New</span>
+                        </p>
                     </a>
                 </li>
+
+                <!-- Buzón -->
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon far fa-envelope"></i>
                         <p>Buzón</p>
                     </a>
                 </li>
-                <li class="nav-item">
+
+                <!-- Catálogos -->
+                <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fa-solid fa-layer-group"></i>
                         <p>
                             Catálogos
-                            <i class="fas fa-angle-left right"></i>
+                            <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">                        
+                    <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="fa-solid fa-building-circle-check nav-icon"></i>
                                 <p>Departamento</p>
                             </a>
-                        </li>                        
+                        </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="fa-solid fa-people-group nav-icon"></i>
                                 <p>Grupos y Permisos</p>
                             </a>
-                        </li>                        
+                        </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="fa-solid fa-users nav-icon"></i>
                                 <p>Usuarios</p>
                             </a>
-                        </li>                        
+                        </li>
                     </ul>
                 </li>
+
+                <!-- Teclas Rapidas -->
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fa-solid fa-keyboard nav-icon"></i>
                         <p>Teclas Rapidas</p>
                     </a>
                 </li>
-                
-                
-                <li class="nav-header">MISCELÁNEAS</li>                
-                <li class="nav-item">
+
+                <!-- Misceláneas -->
+                <li class="nav-header">MISCELÁNEAS</li>
+
+                <!-- Configuración -->
+                <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="fa-solid fa-screwdriver-wrench nav-icon"></i>
                         <p>
                             Configuración
-                            <i class="fas fa-angle-left right"></i>
+                            <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">                        
-                        <li class="nav-item">                            
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="fa-solid fa-bell nav-icon"></i>
-                                <p>
-                                    Alertas                                    
-                                </p>
-                            </a>                            
-                        </li>                        
+                                <p>Alertas</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="fa-solid fa-envelope nav-icon"></i>
-                                <p>
-                                    Email Settings                                    
-                                </p>
-                            </a>                            
-                        </li>                        
+                                <p>Email Settings</p>
+                            </a>
+                        </li>
                     </ul>
-                </li>                
+                </li>
             </ul>
         </nav>
+        <!-- /.sidebar-menu -->
     </div>
+    <!-- /.sidebar -->
 </aside>
+

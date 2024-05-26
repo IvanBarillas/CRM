@@ -18,6 +18,9 @@ from django.conf import settings
 from .tasks import send_access_enduser_email, send_admin_login_email
 import logging
 
+from django.views.generic.base import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 logger = logging.getLogger(__name__)
 
 class UserRegisterAPIView(generics.CreateAPIView):
@@ -114,3 +117,14 @@ class AccessTokenLoginView(APIView):
         except Exception as e:
             logger.error(f"Error desconocido: {str(e)}")
             return redirect('admin:login')  # Redirigir a la página de login del admin en caso de error desconocido
+
+# vistas de Renderizado de Templates
+
+class AccountSettingsAccountView(TemplateView):
+    template_name = 'users/account_settings_account.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Configuracón de la Cuenta'        
+        return context
+    
