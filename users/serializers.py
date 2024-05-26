@@ -33,7 +33,3 @@ class ManagerUserSerializer(serializers.ModelSerializer):
         user = ManagerUser.objects.create_user(**validated_data)
         Profile.objects.create(user=user, **profile_data)
         return user
-
-
-class RequestAccessSerializer(serializers.Serializer):
-    email = serializers.EmailField()
