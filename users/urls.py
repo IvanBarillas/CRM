@@ -7,5 +7,9 @@ urlpatterns = [
     path('profile/', UserProfileAPIView.as_view(), name='user_profile'),
     path('redirect/', UserTypeRedirectAPIView.as_view(), name='user_redirect'),
     
+<<<<<<< HEAD
+=======
+
+>>>>>>> features/Portal
     path('account_settings/account/', AccountSettingsAccountView.as_view(), name='account_settings_account'),
-] 
+]  

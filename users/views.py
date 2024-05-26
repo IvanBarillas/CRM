@@ -1,11 +1,11 @@
 #users/views.py
-from django.views.generic.base import TemplateView
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import EndUser, ManagerUser
 from .serializers import EndUserSerializer
+from django.views.generic.base import TemplateView
 
 class UserRegisterAPIView(generics.CreateAPIView):
     queryset = EndUser.objects.all()
