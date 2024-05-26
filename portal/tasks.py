@@ -1,3 +1,4 @@
+# portal/taks.py
 from celery import shared_task
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
@@ -13,7 +14,7 @@ def send_access_enduser_email(email, token):
         f"Hola, {email}!\n\n"
         "Usted ha sido invitado a realizar inicio de sesión en el portal CRM Mesa de Ayuda.\n\n"
         "Click en el link para iniciar sesión en el Portal\n\n"
-        f"{settings.SITE_URL}/api/users/access/{token}/\n\n"
+        f"{settings.SITE_URL}/portal/access/{token}/\n\n"
         "El enlace de invitación anterior es válido solo por un corto período de tiempo, así que inicie sesión rápidamente.\n\n"
         "Gracias por Contactarnos!\n"
         "---------------------------------------------------------------------------------\n"
@@ -26,7 +27,7 @@ def send_access_enduser_email(email, token):
     html_content = (
         f"<h2><strong>Hola, {email}!</strong></h2>"
         "<p>Usted ha sido invitado a realizar inicio de sesión en el portal CRM Mesa de Ayuda.</p>"
-        f"<p><a href='{settings.SITE_URL}/api/users/access/{token}/'>Click en el link para iniciar sesión en el Portal</a></p>"
+        f"<p><a href='{settings.SITE_URL}/portal/access/{token}/'>Click en el link para iniciar sesión en el Portal</a></p>"
         "<p>El enlace de invitación anterior es válido solo por un corto período de tiempo, así que inicie sesión rápidamente.</p>"
         "<p>Gracias por Contactarnos!</p>"
         "<hr>"

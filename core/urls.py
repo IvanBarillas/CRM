@@ -12,6 +12,7 @@ urlpatterns = [
 
     # URLs de API users
     path('api/users/', include('users.urls')),
+    path('portal/', include('portal.urls')),
 
     # URLs para obtención y refresco de tokens JWT
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
