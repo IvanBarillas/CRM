@@ -10,4 +10,4 @@ urlpatterns = [
     path('request-access/', RequestAccessTokenAPIView.as_view(), name='request_access_token'),
 
     path('account_settings/account/', AccountSettingsAccountView.as_view(), name='account_settings_account'),
-] 
+]  
